@@ -1,0 +1,11 @@
+--- cloud.cfg.orig	2023-05-19 20:40:46.635186812 +0200
++++ cloud.cfg	2023-05-19 20:40:56.515353222 +0200
+@@ -9,7 +9,7 @@
+ 
+ # If this is set, 'root' will not be able to ssh in and they 
+ # will get a message to login instead as the above $user (debian)
+-disable_root: true
++disable_root: false
+ 
+ # This will cause the set+update hostname module to not operate (if true)
+ preserve_hostname: false
