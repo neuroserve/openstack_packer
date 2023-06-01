@@ -25,9 +25,9 @@ packer {
 source "openstack" "postgresql14-patroni-consul" {
   image_name    = "postgresql14-patroni-consul"
   flavor        = "${var.flavor}"
-  cloud = "scs1"
+  cloud = "prod3"
   instance_name = "image_builder_${uuidv4()}"
-  networks      = ["891bcbd9-87f0-42ed-9932-b4142ec10e25"]
+  networks      = ["12e2fa99-0511-42b3-975a-8c1710b7d772"]
   floating_ip_pool = "ext01"
   use_floating_ip = true
   security_groups = [ "default" ]
@@ -85,6 +85,7 @@ build {
       
       # PIP
       "sudo apt-get -y install python3-pip",
+      "sudo apt-get -y install python3-psycopg2",
 
       # Patroni
       "pip3 install patroni[consul]",
@@ -97,6 +98,11 @@ build {
 
       # Build and install pgbackrest
       "sudo apt-get -y install pgbackrest",
+
+      # Install pmm-client
+      "cd /tmp ; wget --no-check-certificate https://downloads.percona.com/downloads/pmm2/2.37.0/binary/debian/bullseye/x86_64/pmm2-client_2.37.0-6.bullseye_amd64.deb",
+      "dpkg -i /tmp/pmm2-client_2.37.0-6.bullseye_amd64.deb",
+      "cd /tmp ; rm pmm2-client*.deb",
     ]
   }
 
