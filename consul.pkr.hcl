@@ -18,9 +18,9 @@ source "openstack" "debian-11-consul" {
   image_name    = "debian-11-consul"
   flavor = "SCS-2V:2:20"
   ssh_username = "debian"
-  cloud = "scs1"
+  cloud = "prod3"
   instance_name = "image_builder_${uuidv4()}"
-  networks         = [ "891bcbd9-87f0-42ed-9932-b4142ec10e25" ]
+  networks         = [ "12e2fa99-0511-42b3-975a-8c1710b7d772" ]
   floating_ip_pool = "ext01"
   use_floating_ip  = true
   security_groups  = [ "default" ]
