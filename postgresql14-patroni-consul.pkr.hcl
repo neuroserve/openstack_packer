@@ -81,6 +81,7 @@ build {
 
       "sudo apt-get update",
       "sudo apt-get -y install postgresql-14",
+      "sudo apt-get -y install postgresql-contrib",
       "sudo systemctl disable postgresql.service",
       
       # PIP
@@ -103,6 +104,14 @@ build {
       "cd /tmp ; wget --no-check-certificate https://downloads.percona.com/downloads/pmm2/2.37.0/binary/debian/bullseye/x86_64/pmm2-client_2.37.0-6.bullseye_amd64.deb",
       "dpkg -i /tmp/pmm2-client_2.37.0-6.bullseye_amd64.deb",
       "cd /tmp ; rm pmm2-client*.deb",
+
+      # Install percona-release
+      "cd /tmp ; curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb",
+      "cd /tmp ; sudo apt-get -y install gnupg2 lsb-release ./percona-release_latest.generic_all.deb",
+      "sudo apt update",
+      "sudo percona-release setup ppg14",
+      "sudo apt-get -y install percona-pg-stat-monitor14",
+      "cd /tmp ; rm percona-release_latest.generic_all.deb",
     ]
   }
 
