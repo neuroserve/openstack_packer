@@ -10,6 +10,7 @@ variable "flavor" {
 
 locals {
     consul_version="1.15.2"
+    wal-g_version="2.0.1"
     timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }
 
@@ -104,6 +105,12 @@ build {
       "cd /tmp ; wget --no-check-certificate https://downloads.percona.com/downloads/pmm2/2.37.0/binary/debian/bullseye/x86_64/pmm2-client_2.37.0-6.bullseye_amd64.deb",
       "dpkg -i /tmp/pmm2-client_2.37.0-6.bullseye_amd64.deb",
       "cd /tmp ; rm pmm2-client*.deb",
+
+      # Build and/or install wal-g
+      "cd /tmp ; wget --no-check-certificate https://github.com/wal-g/wal-g/releases/download/v${local.wal-g_version}/wal-g-pg-ubuntu-20.04-amd64.tar.gz",
+      "cd /tmp ; tar -xvzf wal-g-pg-ubuntu-20.04-amd64.tar.gz",
+      "cd /tmp ; mv wal-g-pg-ubuntu-20.04-amd64 /usr/local/bin/wal-g",
+      "chmod +x /usr/local/bin/wal-g",
 
       # Install percona-release
       "cd /tmp ; curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb",
