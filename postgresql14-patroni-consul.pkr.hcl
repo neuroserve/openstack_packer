@@ -63,7 +63,7 @@ build {
 
   provisioner "shell" {
     inline = [
-      "sudo apt-get -y install wget unzip gnupg",
+      "sudo apt-get -y install wget unzip gnupg daemontools tmux zstd",
       "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -",
       
       "sudo apt-get update",
@@ -94,7 +94,7 @@ build {
 
       # Build and install citus extension
       "curl https://install.citusdata.com/community/deb.sh | sudo bash",
-      "sudo apt-get -y install postgresql-14-citus-11.3",
+      "sudo apt-get -y install postgresql-14-citus-12.0",
       "sudo pg_conftool 14 main set shared_preload_libraries citus",
 
 
