@@ -18,9 +18,9 @@ source "openstack" "debian-11-consul" {
   image_name    = "debian-11-consul"
   flavor = "SCS-2V:2:20"
   ssh_username = "debian"
-  cloud = "prod3"
+  cloud = "patroni"
   instance_name = "image_builder_${uuidv4()}"
-  networks         = [ "12e2fa99-0511-42b3-975a-8c1710b7d772" ]
+  networks         = [ "53a878f2-306e-45db-a523-904b05c2e208" ]
   floating_ip_pool = "ext01"
   use_floating_ip  = true
   security_groups  = [ "default" ]
@@ -47,6 +47,16 @@ build {
     destination = "/var/tmp/cloud.cfg.patch"
   }
 
+  provisioner "file" {
+   source = "${path.root}/files/10-consul.dnsmasq"
+   destination = "/var/tmp/10-consul"
+  }
+
+  provisioner "file" {
+   source = "${path.root}/files/dnsmasq.conf"
+   destination = "/var/tmp/dnsmasq.conf"
+  }
+
   provisioner "shell" {
     inline = [
       "sudo apt-get update -y",
@@ -55,6 +65,14 @@ build {
       "sudo patch /etc/ssh/sshd_config < /var/tmp/sshd_config.patch",
       "sudo systemctl restart sshd",
       "sudo patch /etc/cloud/cloud.cfg < /var/tmp/cloud.cfg.patch",
+      "sudo apt-get install -y dnsmasq",
+      "sudo cp /var/tmp/dnsmasq.conf /etc/dnsmasq.conf",
+      "sudo cp /var/tmp/10-consul /etc/dnsmasq.d/10-consul",
+      "sudo systemctl disable systemd-resolved",
+      "sudo systemctl stop systemd-resolved",
+      "sudo systemctl enable dnsmasq",
+      "sudo systemctl start dnsmasq",
+      "sudo systemctl daemon-reload",
     ]
   }
 }
